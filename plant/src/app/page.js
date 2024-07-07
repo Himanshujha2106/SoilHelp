@@ -49,92 +49,18 @@ export default function Home() {
       );
       console.log(response.data);
 
-// Define the API endpoint
-const apiUrl = 'https://rest.isric.org/soilgrids/v2.0/properties/query?lon=23&lat=79.9080448&property=clay&property=sand&depth=0-5cm&value=mean&value=uncertainty';
-
-// Function to fetch soil data from the API
-async function fetchSoilData() {
-  try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching soil data:', error);
-  }
-}
-
-// Function to analyze the soil data and perform evaluations
-function analyzeSoilData(data) {
-  if (!data || !data.properties || !data.properties.layers) {
-    console.error('Invalid data structure:', data);
-    return '';
-  }
-
-  const layers = data.properties.layers;
-  let clayContent = null;
-  let sandContent = null;
-  let analysisText = '';
-
-  layers.forEach(layer => {
-    const { name, unit_measure, depths } = layer;
-
-    analysisText += `Layer Name: ${name}\n`;
-    analysisText += `Measurement Conversion: ${unit_measure.d_factor} ${unit_measure.mapped_units} to ${unit_measure.target_units}\n`;
-
-    depths.forEach(depth => {
-      const { range, label, values } = depth;
-      const { top_depth, bottom_depth, unit_depth } = range;
-      analysisText += `Depth Range: ${label} (${top_depth}-${bottom_depth} ${unit_depth})\n`;
-      analysisText += `Mean Value: ${values.mean} ${unit_measure.target_units}\n`;
-      analysisText += `Uncertainty: ${values.uncertainty} ${unit_measure.target_units}\n`;
-    });
-
-    // Extract clay and sand content
-    if (name === 'clay') {
-      clayContent = depths[0].values.mean;
-    } else if (name === 'sand') {
-      sandContent = depths[0].values.mean;
-    }
-  });
-
-  // Perform soil health evaluation and crop suggestions
-  analysisText += evaluateSoilHealth(clayContent, sandContent);
-  analysisText += suggestCrops(clayContent, sandContent);
-
-  return analysisText;
-}
 
 
 
 
-// Main function to run the process
 
-  const data = await fetchSoilData();
-  if (data) {
-    console.log('Soil Data:', data);
+// yash yaha se krna
 
-    // Analyze the data and get the text output
-    const analysisText = analyzeSoilData(data);
-    console.log('Analysis Text:\n', analysisText);
 
-    // Store the text in a `data` variable
-    const results = {
-      soilData: data,
-      analysisText: analysisText
-    };
 
-    // Example of using the `results` variable
-    console.log('Stored Results:', results);
 
-    // Here you can use `results` for further processing or display it
-    // Example: Displaying the results on a web page
-    document.getElementById('soilAnalysis').innerText = results.analysisText;
 
-  
-}
+
 
 
 
